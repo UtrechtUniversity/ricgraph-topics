@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+
+# Data / models / results
+topics.jsonl
+topics_embeddings.npy
+results/
+models/
+texts/
+
+# Notebooks cache
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

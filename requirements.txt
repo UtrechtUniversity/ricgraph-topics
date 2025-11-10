@@ -1,0 +1,7 @@
+requests
+pandas
+numpy
+scikit-learn
+sentence-transformers
+openpyxl
+llama-cpp-python

@@ -1,0 +1,108 @@
+# Ricgraph Topics Classification (HUgrad Winter 2025–2026)
+
+This project classifies research abstracts into standardized **OpenAlex Topics**, using text embeddings and optionally a local **LLM** (Large Language Model) for topic enrichment.
+
+It was developed as part of Utrecht University’s Ricgraph infrastructure and can run fully offline once data and models are downloaded.
+
+---
+
+## Overview
+
+### What it does
+1. Downloads all OpenAlex Topics (`topics.jsonl`)
+2. Builds embeddings for those topics (`topics_embeddings.npy`)
+3. Reads local abstracts from the `texts/` folder
+4. Classifies each abstract using three methods:
+   - Whole-abstract cosine similarity
+   - Sentence-level cosine similarity
+   - Optional: LLM-generated topics matched to OpenAlex
+5. Combines all results into final, ranked topic keywords
+6. Exports results to CSV and Excel (`results/` folder)
+
+---
+
+## Installation
+
+```bash
+git clone git@github.com:UtrechtUniversity/ricgraph-topics-HUgrad-winter2025-2026.git
+cd ricgraph-topics-HUgrad-winter2025-2026
+python -m venv .venv
+source .venv/bin/activate          # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+This installs:
+
+sentence-transformers
+
+pandas, numpy, scikit-learn, openpyxl
+
+(optional) llama-cpp-python if you use the LLM method
+
+Optional: Local LLM model
+To enable the LLM-based step (method 3), download a quantized GGUF model into the models/ folder.
+
+Recommended models
+Model	Example file	Source
+Llama 3 8B Instruct	Meta-Llama-3-8B-Instruct.Q4_K_M.gguf	TheBloke / Hugging Face
+Mistral 7B Instruct v0.2	mistral-7b-instruct-v0.2.Q4_K_M.gguf	TheBloke / Hugging Face
+
+Place the downloaded file in:
+
+bash
+Copy code
+models/llama-pro-8b-instruct.Q4_K_M.gguf
+Then in classify_abstracts_openalex.py, ensure:
+
+python
+Copy code
+USE_LLM = True
+If USE_LLM = False, the pipeline still runs using embeddings only.
+
+How to run
+bash
+Copy code
+# 1. Download OpenAlex Topics
+python scripts/get_topic_open_alex.py
+
+# 2. Create topic embeddings
+python scripts/create_embeddings_from_topics.py
+
+# 3. Add your abstracts (.txt) into /texts/
+# 4. Run classification
+python scripts/classify_abstracts_openalex.py
+Output
+All results are saved in the results/ folder:
+
+File	Description
+doi_keyword_ricgraph.csv	DOI – keyword pairs
+doi_keyword_ricgraph_with_ids.csv	DOI – topic – OpenAlex ID
+classified_abstracts_openalex.xlsx	Compact per-abstract summary
+classified_abstracts_openalex_extended.xlsx	Multi-sheet detailed report
+
+Folder structure
+bash
+Copy code
+ricgraph-topics-HUgrad-winter2025-2026/
+├─ scripts/        # Python scripts for download, embedding, classification
+├─ texts/          # Input abstracts (.txt)
+├─ models/         # Local LLM .gguf models
+├─ results/        # Output CSV / Excel files
+└─ requirements.txt
+Summary of methods
+Method	Description	Typical use
+Whole-abstract similarity	Encodes the full abstract once.	Fast baseline capturing global meaning.
+Sentence-level similarity	Encodes each sentence separately and aggregates similarities.	Captures multiple sub-topics within one text.
+LLM + matching	Uses a local LLM to generate topics, then matches them to OpenAlex.	Provides deeper semantic understanding.
+
+Approximate accuracies:
+Whole-abstract ≈ 70–80 %, Sentence-level ≈ 75–85 %, LLM ≈ 85–95 % (with a good model).
+
+Use cases
+Classify new publications into OpenAlex Topics
+Enrich Ricgraph with standardized topic metadata
+Explore disciplinary coverage across research units
+Provide structured topic data for RAG and analytics workflows
+
+Credits
+Developed by David Grote Beverborg at Utrecht University,
+using open metadata from OpenAlex.
+

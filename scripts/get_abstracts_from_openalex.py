@@ -8,7 +8,7 @@ import pyalex
 from pyalex import Works
 
 # Set your polite pool email
-pyalex.config.email = "d.h.j.grotebeverborg@uu.nl"
+pyalex.config.email = "email@uu.nl"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

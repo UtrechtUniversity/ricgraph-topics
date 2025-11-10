@@ -58,7 +58,7 @@ MODEL_NAME       = "sentence-transformers/all-MiniLM-L6-v2"  # consider "sentenc
 TEXT_MODE        = "name+desc+labels"  # "name" | "name+desc" | "name+desc+labels"
 
 API_URL          = "https://api.openalex.org/topics"
-MAILTO           = "d.grotebeverborg@uu.nl"
+pyalex.config.email = "email@uu.nl"
 PER_PAGE         = 200
 SELECT_FIELDS    = "id,display_name,description,works_count,cited_by_count,updated_date,domain,subfield,field"
 SLEEP_SEC        = 0.1
